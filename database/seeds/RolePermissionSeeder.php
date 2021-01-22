@@ -14,10 +14,57 @@ class RolePermissionSeeder extends Seeder
     public function run()
     {
         //Create Roles
-        $admin = Role::create(['name' => 'admin']);
+        $roleSuperAdmin = Role::create(['name' => 'superadmin']);
+        $roleAdmin = Role::create(['name' => 'admin']);
+        $roleEditor = Role::create(['name' => 'editor']);
+        $roleUser = Role::create(['name' => 'user']);
         //Permission Lis as array
 
-        //Assign Permission
+        $permissions = [
+
+            //dashboard
+            'dashboard.view',
+
+
+            //admin permissions
+            'blog.create',
+            'blog.view',
+            'blog.edit',
+            'blog.delete',
+            'blog.approve',
+
+            //admin permissions
+            'admin.create',
+            'admin.view',
+            'admin.edit',
+            'admin.delete',
+            'admin.approve',
+
+            //roll  permissions
+            'role.create',
+            'role.view',
+            'role.edit',
+            'role.delete',
+            'role.approve',
+
+            //profile  permissions
+            'profile.create',
+            'profile.view',
+            'profile.edit',
+            'profile.delete',
+            'profile.approve',
+        ];
+
+        //Create persmiison and Assign Permission
+        // $permission = Permission::create(['name' => 'edit articles']);
+
+        for ($i=0; $i < count($permissions); $i++) {
+            // create permission
+             $permission = Permission::create(['name' => $permissions[$i]]);
+             $roleSuperAdmin->givePermissionTo($permission);
+             $permission->assignRole($roleSuperAdmin);
+
+        }
 
 
     }
