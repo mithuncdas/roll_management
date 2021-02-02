@@ -36,6 +36,7 @@
     <!-- page container area end -->
     @include('admin.layouts.partial.offset')
     @include('admin.layouts.partial.scripts')
+    @yield('admin_scripts')
 </body>
 
 </html>

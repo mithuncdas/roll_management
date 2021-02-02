@@ -45,13 +45,46 @@
                                                 @enderror
 
                                             </div>
-                                            @foreach ($permissions as $permission)
-
-                                              <div class="form-check">
-                                                <input type="checkbox" class="form-check-input" name="permissions[]" id="checkpermission{{ $permission->id }}" value="{{ $permission->name }}">
-                                                <label class="form-check-label" for="checkpermission{{ $permission->id }}">{{ $permission->name }}</label>
+                                            <div class="form-check">
+                                              <input type="checkbox" class="form-check-input"  id="checkpermissionall">
+                                              <label class="form-check-label" for="checkpermissionall}">All</label>
+                                            </div>
+                                            <hr>
+                                            @php
+                                                $i = 1;
+                                            @endphp
+                                            @foreach ($permission_groups as $group)
+                                             <div class="row">
+                                              <div class="col-3">
+                                                <div class="form-check">
+                                                  <input type="checkbox" class="form-check-input" name="permissions[]" id="{{ $i }}management" value="{{ $group->group_name }}" onclick="checkPermissonByGroup('rol-1{{ $i }}-management-checkbox',this)">
+                                                  <label class="form-check-label" for="checkpermission{{ $group->group_name }}">{{ $group->group_name }}</label>
+                                                </div>
                                               </div>
+                                              <div class="col-9 rol-1{{ $i }}-management-checkbox">
+                                                @php
+                                                  $j = 1;
+                                                    $permissions = App\user::getpermissionByGroupname($group->group_name)
+                                                @endphp
+                                                @foreach ($permissions as $permission)
+                                                  <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" name="permissions[]" id="checkpermission{{ $permission->id }}" value="{{ $permission->name }}">
+                                                    <label class="form-check-label" for="checkpermission{{ $permission->id }}">{{ $permission->name }}</label>
+                                                  </div>
+                                                  @php
+                                                      $j++;
+                                                  @endphp
+                                                @endforeach
+                                              </div>
+                                             </div>
+
+                                             <hr>
+                                             @php
+                                                 $i++;
+                                             @endphp
                                             @endforeach
+
+                                            
                                             <button type="submit" class="btn btn-primary mt-4 pr-4 pl-4">Add Role</button>
                                         </form>
                                     </div>
@@ -65,5 +98,27 @@
 
   </div>
   </div>
+@section('admin_scripts')
+    <script>
+      $("#checkpermissionall").click(function(){
+        if ($(this).is(':checked')) {
+          $('input[type=checkbox]').prop('checked',true);
+        }
+        else{
+          $('input[type=checkbox]').prop('checked',false);
+        }
+      });
+      function checkPermissonByGroup(className, checkThis){
+        const groupIdName = $("#"+checkThis.id);
+        const checkBox = $('.'+className+' input');
+        if (groupIdName.is(':checked')) {
+          checkBox.prop('checked',true);
+        }
+        else{
+          checkBox.prop('checked',false);
+        }
+      }
 
+    </script>
+@endsection
 @endsection

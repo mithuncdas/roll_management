@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -29,7 +31,12 @@ class RolesController extends Controller
     {
 
         $permissions = Permission::all();
-        return view('admin.pages.roles.create',compact('permissions'));
+        $permission_groups = DB::table('permissions')
+            ->select('group_name')
+            ->groupBy('group_name')
+            ->get();
+        
+        return view('admin.pages.roles.create',compact('permissions','permission_groups'));
     }
 
     /**

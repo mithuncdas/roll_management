@@ -18,52 +18,81 @@ class RolePermissionSeeder extends Seeder
         $roleAdmin = Role::create(['name' => 'admin']);
         $roleEditor = Role::create(['name' => 'editor']);
         $roleUser = Role::create(['name' => 'user']);
-        //Permission Lis as array
+        //Permission List as array
 
         $permissions = [
 
-            //dashboard
-            'dashboard.view',
+            [
+                'group_name' => 'dashboard',
+                'permissions' => [
+                    'dashboard.view',
+                    'dashboard.edit',
+                ]
+            ],
+            [
+                'group_name' => 'blog',
+                'permissions' => [
+                //blog permissions
+                    'blog.create',
+                    'blog.view',
+                    'blog.edit',
+                    'blog.delete',
+                    'blog.approve',
+                ]
+            ],
+            [
+                'group_name' => 'admin',
+                'permissions' => [
+                //admin permissions
+                    'admin.create',
+                    'admin.view',
+                    'admin.edit',
+                    'admin.delete',
+                    'admin.approve',
+                ]
+            ],
+            [
+                'group_name' => 'role',
+                'permissions' => [
+                //role permissions
+                    'role.create',
+                    'role.view',
+                    'role.edit',
+                    'role.delete',
+                    'role.approve',
+                ]
+            ],
+            [
+                'group_name' => 'profile',
+                'permissions' => [
+                //profile permissions
+                    'profile.create',
+                    'profile.view',
+                    'profile.edit',
+                    'profile.delete',
+                    'profile.approve',
+                ]
+            ],
 
 
-            //admin permissions
-            'blog.create',
-            'blog.view',
-            'blog.edit',
-            'blog.delete',
-            'blog.approve',
-
-            //admin permissions
-            'admin.create',
-            'admin.view',
-            'admin.edit',
-            'admin.delete',
-            'admin.approve',
-
-            //roll  permissions
-            'role.create',
-            'role.view',
-            'role.edit',
-            'role.delete',
-            'role.approve',
-
-            //profile  permissions
-            'profile.create',
-            'profile.view',
-            'profile.edit',
-            'profile.delete',
-            'profile.approve',
+            
         ];
 
         //Create persmiison and Assign Permission
         // $permission = Permission::create(['name' => 'edit articles']);
 
         for ($i=0; $i < count($permissions); $i++) {
-            // create permission
-             $permission = Permission::create(['name' => $permissions[$i]]);
-             $roleSuperAdmin->givePermissionTo($permission);
-             $permission->assignRole($roleSuperAdmin);
 
+            //permission group 
+            $permission_group = $permissions[$i]['group_name'];
+            // create permission
+            for ($j=0; $j < count($permissions[$i]['permissions']); $j++) {
+                $permission = Permission::create(['name' => $permissions[$i]['permissions'][$j],'group_name' => $permission_group ]);
+                $roleSuperAdmin->givePermissionTo($permission);
+                $permission->assignRole($roleSuperAdmin);
+
+            }
+             
         }
 
 
